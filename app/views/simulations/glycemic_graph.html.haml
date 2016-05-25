@@ -2,6 +2,6 @@
   Graph
 
 - x_range = (0...1400).step(60).to_a
-- y_range = (80...200).step(5).to_a
+- y_range = (80...200).step(2).to_a
 
 = line_chart @graph_inputs,  {discrete: true, library: {hAxis: {title: "Time (min of the day)", ticks: x_range}, vAxis: {title: "Glycemic", ticks: y_range} } }

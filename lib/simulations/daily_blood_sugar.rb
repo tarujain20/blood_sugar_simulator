@@ -8,30 +8,30 @@ module Simulations
     end
 
     def process
-      glycemic_index = GLYCEMIC_INDEX_AT_START
-      time_and_glycemic_hash = glycemic_index_at_start_of_the_day
+      time_and_glycemic_hash = {0 => 80}
 
-      (0..TOTAL_MINUTES_IN_A_DAY).each do |minute|
-        if @food_rate_with_time_entered[minute].present?
-          food_rate_per_min = @food_rate_with_time_entered[minute]
+      @food_rate_with_time_entered.keys.each do |minute|
+        food_rate_per_min = @food_rate_with_time_entered[minute]
 
-          (minute+1..minute+120).each do |index|
-            glycemic_index += food_rate_per_min
+        (minute+1..minute+120).each_with_index do |index, counter|
+          glycemic_index = food_rate_per_min * (counter + 1)
 
-            if time_and_glycemic_hash[index].present?
-              time_and_glycemic_hash[index] += glycemic_index
-            else
-              time_and_glycemic_hash[index] = glycemic_index
-            end
+          if time_and_glycemic_hash[index].present?
+            time_and_glycemic_hash[index] += glycemic_index
+          else
+            time_and_glycemic_hash[index] = glycemic_index
           end
         end
       end
 
+      (1..TOTAL_MINUTES_IN_A_DAY).each do |minute|
+        if time_and_glycemic_hash[minute].present?
+          time_and_glycemic_hash[minute] += 80
+        else
+          time_and_glycemic_hash[minute] = 80
+        end
+      end
       time_and_glycemic_hash.to_a
-    end
-
-    def glycemic_index_at_start_of_the_day
-      {0 => 80}
     end
   end
 end
